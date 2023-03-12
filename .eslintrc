@@ -1,0 +1,11 @@
+
+  {
+    "extends": [
+      "prettier",
+      "prettier/@typescript-eslint",
+      "prettier/react"
+    ],
+    "env": {
+      "node": true,
+    }
+  }
