@@ -7,14 +7,17 @@ interface IListResponse {
         list: {
             id: number;
             name: string;
-            ingredientSubTypes: any[]
+            times: number;
+            emoji?: string;
+            posts: any[];
+            ingredientSubType: any;
         }[] & never[]
     },
     message: string;
 }
 
-export const getIngredientTypes = ():Promise<IListResponse> => {
-    return request('/api/ingredient-type/list', {
+export const getIngredients = ():Promise<IListResponse> => {
+    return request('/api/ingredient/list', {
         method: 'GET',
     });
 }
