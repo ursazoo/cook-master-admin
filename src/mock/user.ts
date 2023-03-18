@@ -33,30 +33,30 @@ if (!isSSR) {
       });
 
       // 登录
-      Mock.mock(new RegExp('/api/user/login'), (params) => {
-        const { userName, password } = JSON.parse(params.body);
-        if (!userName) {
-          return {
-            status: 'error',
-            msg: '用户名不能为空',
-          };
-        }
-        if (!password) {
-          return {
-            status: 'error',
-            msg: '密码不能为空',
-          };
-        }
-        if (userName === 'admin' && password === 'admin') {
-          return {
-            status: 'ok',
-          };
-        }
-        return {
-          status: 'error',
-          msg: '账号或者密码错误',
-        };
-      });
+      // Mock.mock(new RegExp('/api/user/signin'), (params) => {
+      //   const { userName, password } = JSON.parse(params.body);
+      //   if (!userName) {
+      //     return {
+      //       status: 'error',
+      //       msg: '用户名不能为空',
+      //     };
+      //   }
+      //   if (!password) {
+      //     return {
+      //       status: 'error',
+      //       msg: '密码不能为空',
+      //     };
+      //   }
+      //   if (userName === 'admin' && password === 'admin') {
+      //     return {
+      //       status: 'ok',
+      //     };
+      //   }
+      //   return {
+      //     status: 'error',
+      //     msg: '账号或者密码错误',
+      //   };
+      // });
     },
   });
 }
