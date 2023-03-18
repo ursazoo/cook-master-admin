@@ -1,28 +1,26 @@
-import { request } from '../request';
+import request from '@/common/request';
 
 interface APIResponse {
   code: number;
   success: boolean;
   data: {
-    list: IIngredientType[];
+    list: IPrimaryMaterial[];
   };
   message: string;
 }
 
-export interface IIngredientType {
-    id: number;
-    name: string;
-    ingredientSubTypes: IIngredientSubType[];
-  }
-
-export interface IIngredientSubType {
-  id: number;
-  ingredientTypeId: number;
+export interface IPrimaryMaterial {
+  id: string;
   name: string;
+  secondaryMaterialList: ISecondaryMaterial[];
 }
 
-export const getIngredientTypes = (): Promise<APIResponse> => {
-  return request('/api/ingredient-type/list', {
-    method: 'GET',
-  });
+export interface ISecondaryMaterial {
+  id: string;
+  name: string;
+  primaryMaterialId: string;
+}
+
+export const getPrimaryMaterialList = (): Promise<APIResponse> => {
+  return request.get('/api/primary-material/list');
 };

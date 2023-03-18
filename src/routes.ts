@@ -30,20 +30,44 @@ export const routes: IRoute[] = [
     // ],
   },
   {
-    name: '食材管理',
-    key: 'ingredient',
+    name: '材料管理',
+    key: 'material',
     children: [
       {
-        name: '一级食材',
-        key: 'ingredient/type',
+        name: '一级分类',
+        key: 'material/primary',
       },
       {
-        name: '二级食材',
-        key: 'ingredient/sub-type',
+        name: '二级分类',
+        key: 'material/secondary',
       },
       {
-        name: '基础食材',
-        key: 'ingredient/base',
+        name: '基础材料',
+        key: 'material/base',
+      },
+    ],
+  },
+  {
+    name: '菜谱管理',
+    key: 'post',
+    children: [
+      {
+        name: '菜谱列表',
+        key: 'post/list',
+      },
+      {
+        name: '新建菜谱',
+        key: 'post/create',
+      },
+      {
+        name: '编辑菜谱',
+        key: 'post/edit/:id',
+        ignore: true,
+      },
+      {
+        name: '菜谱详情',
+        key: 'post/:id',
+        ignore: true,
       },
     ],
   },
@@ -234,8 +258,7 @@ const useRoute = (userPermission): [IRoute[], string] => {
   const defaultRoute = useMemo(() => {
     const first = permissionRoute[0];
     if (first) {
-      const firstRoute = first?.children?.[0]?.key || first.key;
-      return firstRoute;
+      return first?.children?.[0]?.key || first.key;
     }
     return '';
   }, [permissionRoute]);
