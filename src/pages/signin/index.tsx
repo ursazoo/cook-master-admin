@@ -5,7 +5,7 @@ import LoginForm from './form';
 import LoginBanner from './banner';
 import styles from './style/index.module.less';
 
-function Login() {
+export default function SignInPage() {
   useEffect(() => {
     document.body.setAttribute('arco-theme', 'light');
   }, []);
@@ -32,6 +32,3 @@ function Login() {
     </div>
   );
 }
-Login.displayName = 'LoginPage';
-
-export default Login;
