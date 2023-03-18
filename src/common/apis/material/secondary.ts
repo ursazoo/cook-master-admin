@@ -1,4 +1,4 @@
-import { request } from '../request';
+import axios from 'axios';
 
 interface APIResponse {
   code: number;
@@ -15,15 +15,12 @@ interface IIngredientSubType {
   ingredients: IIngredientSubType[];
 }
 
-export const getIngredientSubTypes = (): Promise<APIResponse> => {
-  return request('/api/ingredient-sub-type/list', {
-    method: 'GET',
+export const getIngredientSubTypes = (params?: any): Promise<APIResponse> => {
+  return axios.get('/api/ingredient-sub-type/list', {
+    params
   });
 };
 
 export const createIngredientSubType = (data: any): Promise<any> => {
-    return request('/api/ingredient-sub-type/create', {
-        method: 'POST',
-        data
-      });
+    return axios.post('/api/ingredient-sub-type/create', data);
 }

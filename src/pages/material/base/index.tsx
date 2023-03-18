@@ -56,7 +56,7 @@ function IngredientBasePage() {
   const [modalTitle, setModalTitle] = useState('');
 
   const [data, setData] = useState([]);
-  const [pagination, setPatination] = useState<PaginationProps>({
+  const [pagination, setPagination] = useState<PaginationProps>({
     sizeCanChange: true,
     showTotal: true,
     pageSize: 10,
@@ -246,7 +246,7 @@ function IngredientBasePage() {
       })
       .then((res) => {
         setData(res.data.list);
-        setPatination({
+        setPagination({
           ...pagination,
           current,
           pageSize,
@@ -258,7 +258,7 @@ function IngredientBasePage() {
 
   // 表格设置分页属性或翻页
   function onChangeTable({ current, pageSize }) {
-    setPatination({
+    setPagination({
       ...pagination,
       current,
       pageSize,
@@ -268,7 +268,7 @@ function IngredientBasePage() {
   // 表格表单搜索
   function handleSearch(values) {
     console.log(values);
-    setPatination({ ...pagination, current: 1 });
+    setPagination({ ...pagination, current: 1 });
     setFormParams(values);
     handleGetIngredients(values)
   }

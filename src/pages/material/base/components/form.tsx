@@ -1,10 +1,8 @@
 import React from 'react';
-import dayjs from 'dayjs';
 import {
   Form,
   Input,
   Select,
-  DatePicker,
   Button,
   Grid,
 } from '@arco-design/web-react';
@@ -13,8 +11,6 @@ import styles from '../style/index.module.less';
 
 const { Row, Col } = Grid;
 const { useForm } = Form;
-export const ContentType = ['图文', '横版短视频', '竖版短视频'];
-export const FilterType = ['规则筛选', '人工'];
 export const Status = ['未上线', '已上线'];
 
 const { OptGroup, Option } = Select;
