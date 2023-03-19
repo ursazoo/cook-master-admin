@@ -41,7 +41,7 @@ export default function LoginForm() {
           duration: 1500,
           onClose: () => {
             Cookies.set('Authorization', result?.data?.token);
-            history.replace('/');
+            history.replace('/material/primary');
           },
         });
       } else {
