@@ -22,29 +22,29 @@ function Index() {
   const [lang, setLang] = useStorage('arco-lang', 'en-US');
   const [theme, setTheme] = useStorage('arco-theme', 'light');
 
-  function fetchUserInfo() {
-    store.dispatch({
-      type: 'update-userInfo',
-      payload: { userLoading: true },
-    });
-    axios.get('/api/user/userInfo').then((res) => {
-      store.dispatch({
-        type: 'update-userInfo',
-        payload: { userInfo: res.data, userLoading: false },
-      });
-    });
-  }
+  // function fetchUserInfo() {
+  //   store.dispatch({
+  //     type: 'update-userInfo',
+  //     payload: { userLoading: true },
+  //   });
+  //   axios.get('/api/user/userInfo').then((res) => {
+  //     store.dispatch({
+  //       type: 'update-userInfo',
+  //       payload: { userInfo: res.data, userLoading: false },
+  //     });
+  //   });
+  // }
 
-  useEffect(() => {
-    if (checkLogin()) {
-      fetchUserInfo();
-    } else if (
-      window.location.pathname.replace(/\//g, '') !== 'signin' &&
-      window.location.pathname.replace(/\//g, '') !== 'signup'
-    ) {
-      window.location.pathname = '/signin';
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (checkLogin()) {
+  //     fetchUserInfo();
+  //   } else if (
+  //     window.location.pathname.replace(/\//g, '') !== 'signin' &&
+  //     window.location.pathname.replace(/\//g, '') !== 'signup'
+  //   ) {
+  //     window.location.pathname = '/signin';
+  //   }
+  // }, []);
 
   useEffect(() => {
     changeTheme(theme);
