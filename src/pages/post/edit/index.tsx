@@ -1,6 +1,6 @@
-import React from "react";
-const PostCreatePage = () => {
-    return <div>PostCreatePage</div>
-}
+import React from 'react';
+const PostEditPage = () => {
+  return <div>PostEditPage</div>;
+};
 
-export default PostCreatePage;
+export default PostEditPage;
