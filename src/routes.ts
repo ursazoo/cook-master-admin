@@ -45,6 +45,10 @@ export const routes: IRoute[] = [
         name: '基础材料',
         key: 'material/base',
       },
+      {
+        name: '厨具',
+        key: 'material/cookware',
+      },
     ],
   },
   {

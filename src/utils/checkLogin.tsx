@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 export default function checkLogin() {
-  return localStorage.getItem('userStatus') === 'login';
+  return Cookies.get('Authorization');
 }
