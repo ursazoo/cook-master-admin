@@ -21,15 +21,18 @@ import axios from 'axios';
 import SearchForm from './components/form';
 // import locale from './locale';
 import styles from './style/index.module.less';
-import './mock';
 // import { getColumns } from './constants';
 import FormItem from '@arco-design/web-react/es/Form/form-item';
 import {
-  getIngredientTypes,
-  IIngredientType,
-} from '@/common/apis/ingredientType';
+  getPrimaryMaterialList,
+  IPrimaryMaterial,
+} from '@/common/apis/material/primary';
 import { useRequest } from 'ahooks';
-import { createIngredient, editIngredient, getIngredients } from '@/common/apis/ingredient';
+import {
+  createBaseMaterial,
+  editBaseMaterial,
+  getBaseMaterialList,
+} from '@/common/apis/material/base';
 
 const { Title, Text } = Typography;
 const { OptGroup, Option } = Select;
@@ -65,15 +68,17 @@ function IngredientBasePage() {
   });
   // const [loading, setLoading] = useState(true);
   const [formParams, setFormParams] = useState({});
-  const [typeGroups, setTypeGroups] = useState<IIngredientType[]>([]);
+  const [primaryMaterialList, setPrimaryMaterialList] = useState<
+    IPrimaryMaterial[]
+  >([]);
 
   const columns: TableColumnProps[] = [
-    {
-      title: 'id',
-      dataIndex: 'id',
-      align: 'center',
-      render: (value) => <Text>{value}</Text>,
-    },
+    // {
+    //   title: 'id',
+    //   dataIndex: 'id',
+    //   align: 'center',
+    //   render: (value) => <Text>{value}</Text>,
+    // },
     {
       title: '名称',
       dataIndex: 'name',
@@ -87,9 +92,9 @@ function IngredientBasePage() {
     },
     {
       title: '所属二级类型',
-      dataIndex: 'ingredientSubType',
+      dataIndex: 'secondaryMaterial',
       align: 'center',
-      render: (_) => _.name,
+      render: (_) => _?.name,
     },
     {
       title: '可选菜谱',
@@ -119,73 +124,44 @@ function IngredientBasePage() {
     },
     {
       title: '创建时间',
-      dataIndex: 'createdAt',
+      dataIndex: 'createdTime',
       align: 'center',
-      render: (x) => dayjs(x).format('YYYY-MM-DD HH:mm:ss'),
-      sorter: (a, b) => dayjs(b.createdAt).unix() - dayjs(a.createdAt).unix(),
+      render: (x) => dayjs(x).format('YYYY-MM-DD HH:mm'),
+      sorter: (a, b) =>
+        dayjs(b.createdTime).unix() - dayjs(a.createdTime).unix(),
     },
     {
       title: '操作',
       dataIndex: 'operations',
       align: 'center',
       render: (_, record) => {
-        return <>
-          <Button
-          type="text"
-          size="small"
-          onClick={() => {
-            setCurrent(record)
-            setVisible(true)
-          }}
-        >
-          编辑
-        </Button>
-        <Button
-          status='danger'
-          type="text"
-          size="small"
-        >
-          删除
-        </Button>
-        </>
+        return (
+          <>
+            <Button
+              type="text"
+              size="small"
+              onClick={() => {
+                setCurrent(record);
+                setVisible(true);
+              }}
+            >
+              编辑
+            </Button>
+            <Button status="danger" type="text" size="small">
+              删除
+            </Button>
+          </>
+        );
       },
     },
   ];
 
-  const { run: handleGetIngredients, loading } = useRequest(getIngredients, {
-    onSuccess: (result) => {
-      if (result.success) {
-        setData(result.data.list || []);
-      }
-    },
-    onError: (e) => {
-      console.log(e);
-    },
-  });
-
-  const { run: handleGetIngredientTypes } = useRequest(getIngredientTypes, {
-    // manual: true,
-    onSuccess: (result) => {
-      if (result.success) {
-        setTypeGroups(result.data.list || []);
-      }
-    },
-    onError: (e) => {
-      console.log(e);
-    },
-  });
-
-  const { run: handleCreateIngredient } = useRequest(
-    createIngredient,
+  const { run: handleGetBaseMaterialList, loading } = useRequest(
+    getBaseMaterialList,
     {
-      manual: true,
       onSuccess: (result) => {
         if (result.success) {
-          console.log(result);
-          Message.success(result?.message);
-          setVisible(false);
-          setConfirmLoading(false);
-          handleGetIngredients();
+          setData(result.data.list || []);
         }
       },
       onError: (e) => {
@@ -194,17 +170,13 @@ function IngredientBasePage() {
     }
   );
 
-  const { run: handleEditIngredient } = useRequest(
-    editIngredient,
+  const { run: handleGetPrimaryMaterialList } = useRequest(
+    getPrimaryMaterialList,
     {
-      manual: true,
+      // manual: true,
       onSuccess: (result) => {
         if (result.success) {
-          console.log(result);
-          Message.success(result?.message);
-          setVisible(false);
-          setConfirmLoading(false);
-          handleGetIngredients();
+          setPrimaryMaterialList(result.data.list || []);
         }
       },
       onError: (e) => {
@@ -213,18 +185,49 @@ function IngredientBasePage() {
     }
   );
 
+  const { run: handleCreateBaseMaterial } = useRequest(createBaseMaterial, {
+    manual: true,
+    onSuccess: (result) => {
+      if (result.success) {
+        console.log(result);
+        Message.success(result?.message);
+        setVisible(false);
+        setConfirmLoading(false);
+        handleGetBaseMaterialList();
+      }
+    },
+    onError: (e) => {
+      console.log(e);
+    },
+  });
 
-  useEffect(() => {
-    fetchData();
-  }, [pagination.current, pagination.pageSize, JSON.stringify(formParams)]);
+  const { run: handleEditBaseMaterial } = useRequest(editBaseMaterial, {
+    manual: true,
+    onSuccess: (result) => {
+      if (result.success) {
+        console.log(result);
+        Message.success(result?.message);
+        setVisible(false);
+        setConfirmLoading(false);
+        handleGetBaseMaterialList();
+      }
+    },
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, [pagination.current, pagination.pageSize, JSON.stringify(formParams)]);
 
   useEffect(() => {
     if (visible) {
-      setModalTitle(`${current? '编辑' : '新建'}基础食材`);
+      setModalTitle(`${current ? '编辑' : '新建'}基础材料`);
       infoForm.setFieldsValue({
         name: current?.name,
-        ingredientSubTypeId: current?.ingredientSubType?.id
-      })
+        ingredientSubTypeId: current?.ingredientSubType?.id,
+      });
     } else {
       setCurrent(undefined);
       setConfirmLoading(false);
@@ -270,21 +273,26 @@ function IngredientBasePage() {
     console.log(values);
     setPagination({ ...pagination, current: 1 });
     setFormParams(values);
-    handleGetIngredients(values)
+    handleGetBaseMaterialList(values);
   }
 
-  // 保存基础食材信息弹窗
+  // 保存基础材料信息弹窗
   function onOk() {
     infoForm.validate().then((values) => {
       setConfirmLoading(true);
-      current?.id ? handleEditIngredient(current.id, values) : handleCreateIngredient(values)
+      current?.id
+        ? handleEditBaseMaterial(current.id, values)
+        : handleCreateBaseMaterial(values);
     });
   }
 
   return (
     <Card>
-      <Title heading={6}>基础食材管理</Title>
-      <SearchForm onSearch={handleSearch} ingredientSubTypes={typeGroups}/>
+      <Title heading={6}>基础材料管理</Title>
+      <SearchForm
+        onSearch={handleSearch}
+        primaryMaterialList={primaryMaterialList}
+      />
       <div className={styles['button-group']}>
         <Space>
           <Button
@@ -326,20 +334,28 @@ function IngredientBasePage() {
             style: { flexBasis: 'calc(100% - 100px)' },
           }}
         >
-          <FormItem label="名称" field="name" rules={[{ required: true, message: '名称是必填项' }]}>
+          <FormItem
+            label="名称"
+            field="name"
+            rules={[{ required: true, message: '名称是必填项' }]}
+          >
             <Input allowClear placeholder="输入名称" />
           </FormItem>
-          <FormItem label="所属分类" field="ingredientSubTypeId" rules={[{ required: true, message: '所属分类是必选项' }]}>
+          <FormItem
+            label="所属分类"
+            field="secondaryMaterialId"
+            rules={[{ required: true, message: '所属分类是必选项' }]}
+          >
             <Select
               showSearch
               allowClear
               placeholder="选择所属分类"
               style={{ width: 200 }}
             >
-              {typeGroups.map((options, index) => {
+              {primaryMaterialList.map((options, index) => {
                 return (
                   <OptGroup label={options.name} key={`group_${index}`}>
-                    {options.ingredientSubTypes.map((option) => (
+                    {options.secondaryMaterialList.map((option) => (
                       <Option key={`option_${option.id}`} value={option.id}>
                         {option.name}
                       </Option>

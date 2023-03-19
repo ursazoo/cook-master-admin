@@ -10,6 +10,7 @@ export const Status = ['未上线', '已上线'];
 const { OptGroup, Option } = Select;
 
 function SearchForm(props: {
+  secondaryMaterialList: any[];
   primaryMaterialList: any[];
   onSearch: (values: Record<string, any>) => void;
 }) {
@@ -41,17 +42,30 @@ function SearchForm(props: {
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item label="二级分类" field="ingredientSubTypeId">
-              <Select showSearch allowClear placeholder="选择所属分类">
-                {props?.primaryMaterialList?.map((options, index) => {
+            <Form.Item label="二级分类" field="secondaryMaterialId">
+              <Select showSearch allowClear placeholder="请选择二级分类">
+                {props?.secondaryMaterialList.map((options, index) => {
                   return (
                     <OptGroup label={options.name} key={`group_${index}`}>
-                      {options?.secondaryMaterialList?.map((option) => (
+                      {options.ingredientSubTypes.map((option) => (
                         <Option key={`option_${option.id}`} value={option.id}>
                           {option.name}
                         </Option>
                       ))}
                     </OptGroup>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label="一级分类" field="ingredientTypeId">
+              <Select showSearch allowClear placeholder="请选择所属一级分类">
+                {props?.primaryMaterialList.map((option, index) => {
+                  return (
+                    <Option key={`option_${option.id}`} value={option.id}>
+                      {option.name}
+                    </Option>
                   );
                 })}
               </Select>

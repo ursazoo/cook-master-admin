@@ -1,0 +1,78 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.operations {
+  display: flex;
+}
+
+.content-type {
+  display: flex;
+
+  > svg {
+    margin-right: 8px;
+    margin-top: 3px;
+  }
+}
+
+.search-form-wrapper {
+  display: flex;
+  border-bottom: 1px solid var(--color-border-1);
+  margin-bottom: 20px;
+
+  .right-button {
+    display: flex;
+    // flex-direction: column;
+    justify-content: space-between;
+    padding-left: 20px;
+    margin-bottom: 20px;
+    border-left: 1px solid var(--color-border-2);
+    box-sizing: border-box;
+  }
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.search-form {
+  padding-right: 20px;
+
+  :global(.arco-form-label-item-left) {
+    > label {
+      white-space: nowrap;
+    }
+  }
+}
+
+.colorPickerBtn {
+  padding: 5px;
+  background: #fff;
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 10%);
+  display: inline-block;
+  cursor: pointer;
+}
+
+.colorPickerInner {
+  width: 36px;
+  height: 14px;
+  border-radius: 2px;
+}
+
+.colorPopover {
+  position: absolute;
+  z-index: 2;
+}
+
+.colorOver {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
