@@ -26,3 +26,7 @@ export const getSecondaryMaterialList = (
 export const createSecondaryMaterial = (data: any): Promise<any> => {
   return request.post('/api/secondary-material/create', data);
 };
+
+export const editSecondaryMaterial = (id: string, data: any): Promise<any> => {
+  return request.patch(`/api/secondary-material/${id}`, data);
+};

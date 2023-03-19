@@ -24,3 +24,18 @@ export interface ISecondaryMaterial {
 export const getPrimaryMaterialList = (): Promise<APIResponse> => {
   return request.get('/api/primary-material/list');
 };
+
+export const createPrimaryMaterial = (data: {
+  name: string;
+}): Promise<APIResponse> => {
+  return request.post('/api/primary-material/create', data);
+};
+
+export const editPrimaryMaterial = (
+  id,
+  data: {
+    name: string;
+  }
+): Promise<APIResponse> => {
+  return request.patch(`/api/primary-material/${id}`, data);
+};

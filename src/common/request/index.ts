@@ -22,7 +22,9 @@ axios.defaults.timeout = 5000;
 // 全局请求拦截器
 axios.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么 可更改请求的配置，比如在headers添加通用的token
-  config.headers['Authorization'] = Cookies.get('Authorization') || ''; //设置token
+  config.headers['Authorization'] = `Bearer ${
+    Cookies.get('Authorization') || ''
+  }`; //设置token
   return config;
 });
 
