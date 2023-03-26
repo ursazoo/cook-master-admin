@@ -1,41 +1,40 @@
-import React from 'react';
-import { Grid, Space } from '@arco-design/web-react';
-import Overview from './overview';
-import PopularContents from './popular-contents';
-import ContentPercentage from './content-percentage';
-import Shortcuts from './shortcuts';
-import Announcement from './announcement';
-import Carousel from './carousel';
-import Docs from './docs';
-import styles from './style/index.module.less';
-import './mock';
+import React, { useState, useEffect } from 'react';
+import { Card, Form, Typography, Message } from '@arco-design/web-react';
 
-const { Row, Col } = Grid;
+import { useRequest } from 'ahooks';
+import {
+  createBaseMaterial,
+  editBaseMaterial,
+  getBaseMaterialList,
+} from '@/common/apis/material/base';
 
-const gutter = 16;
+const { Title, Paragraph } = Typography;
 
-function Workplace() {
+function DashboardPage() {
+  //
+
+  const { run: handleCreateBaseMaterial } = useRequest(createBaseMaterial, {
+    manual: true,
+    onSuccess: (result) => {
+      if (result.success) {
+        console.log(result);
+        Message.success(result?.message);
+      }
+    },
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+
   return (
-    <div className={styles.wrapper}>
-      <Space size={16} direction="vertical" className={styles.left}>
-        <Overview />
-        <Row gutter={gutter}>
-          <Col span={12}>
-            <PopularContents />
-          </Col>
-          <Col span={12}>
-            <ContentPercentage />
-          </Col>
-        </Row>
-      </Space>
-      <Space className={styles.right} size={16} direction="vertical">
-        <Shortcuts />
-        <Carousel />
-        <Announcement />
-        <Docs />
-      </Space>
-    </div>
+    <Card>
+      <Title heading={6}>总览</Title>
+      {/* <SearchForm
+        onSearch={handleSearch}
+        primaryMaterialList={primaryMaterialList}
+      /> */}
+    </Card>
   );
 }
 
-export default Workplace;
+export default DashboardPage;
