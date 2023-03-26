@@ -27,7 +27,6 @@ interface IEditBaseMaterialParams {
   name?: string;
   emoji?: string;
   secondaryMaterialId?: string;
-  Ï;
   postIds?: number[];
 }
 

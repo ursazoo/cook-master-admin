@@ -7,18 +7,42 @@ interface APIResponse<T> {
   message: string;
 }
 
-export const createPost = (data: any): Promise<APIResponse<any>> => {
+interface IBaseInfo {
+  id: string;
+  name: string;
+}
+
+interface IPostItem {
+  id: string;
+  title: string;
+  content: string;
+  author: IBaseInfo;
+  baseMaterialList: (IBaseInfo & { emoji: string })[];
+  cookwareList: IBaseInfo[];
+}
+
+export const createPost = (data: any): Promise<APIResponse<null>> => {
   return request.post('/api/post', data);
 };
 
-export const getPostList = (): Promise<APIResponse<any>> => {
-  return request.get('/api/post');
+export const getPostList = (data: {
+  pageNum: number;
+  pageSize: number;
+}): Promise<APIResponse<{ list: IPostItem[] }>> => {
+  return request.post('/api/post/list', data);
 };
 
-export const getPostDetail = (id: string): Promise<APIResponse<any>> => {
-  return request.get(`/api/post/${id}`);
+export const getPostDetail = (params: {
+  id: string;
+}): Promise<APIResponse<IPostItem>> => {
+  console.log(params);
+  return request.get(`/api/post/${params.id}`);
 };
 
-export const editPost = (id: string, data: any): Promise<APIResponse<any>> => {
-  return request.patch(`/api/post/${id}`, data);
+export const editPost = (data: any): Promise<APIResponse<null>> => {
+  return request.patch(`/api/post`, data);
+};
+
+export const viewPost = (id: string): Promise<APIResponse<null>> => {
+  return request.patch(`/api/post/view/${id}`);
 };

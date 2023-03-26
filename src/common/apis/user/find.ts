@@ -7,6 +7,6 @@ interface APIResponse<T> {
   message: string;
 }
 
-export const getAllUser = (): Promise<APIResponse<any>> => {
-  return request.get('/api/user');
+export const getAllUserList = (data: any): Promise<APIResponse<any>> => {
+  return request.post('/api/user/list', data);
 };

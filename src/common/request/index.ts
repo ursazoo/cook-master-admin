@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, Method } from 'axios';
 import Cookies from 'js-cookie';
+import { ECODE } from './enums';
 
 interface Data {
   [key: string]: unknown;
@@ -31,6 +32,8 @@ axios.interceptors.request.use(function (config) {
 // 全局响应拦截器
 axios.interceptors.response.use(
   function (response) {
+    console.log('====response====');
+    console.log(response);
     // 对响应数据做点什么 可指定返回的内容
     let data: any = {};
 
@@ -51,11 +54,22 @@ axios.interceptors.response.use(
     }
   },
   function (error) {
+    switch (error.toJSON().status) {
+      case ECODE['未登录或者登录授权已过期']:
+        location.replace('/signin');
+        break;
+
+      default:
+        break;
+    }
     // 对响应错误做点什么 都返回resolve去处理这样做的好处就是不需要再在每个请求里边写catch错误处理的方法了
     // 这里返回的内容可一个自定义通用的处理方式
     // Toast.fail(error?.data?.message ?? '网络异常');
     // store.commit('loading/hide');
     // return Promise.resolve(error?.data);
+
+    console.log(new Error(error?.data?.message || 'Error'));
+
     return Promise.reject(new Error(error?.data?.message || 'Error'));
   }
 );
