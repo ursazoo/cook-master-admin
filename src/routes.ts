@@ -15,6 +15,7 @@ export const routes: IRoute[] = [
   {
     name: '总览' || 'menu.dashboard',
     key: 'dashboard',
+    breadcrumb: false,
     // children: [
     //   {
     //     name: 'menu.dashboard.workplace',
@@ -184,16 +185,20 @@ export const routes: IRoute[] = [
     ],
   },
   {
-    name: 'menu.user',
+    name: '用户管理',
     key: 'user',
     children: [
       {
-        name: 'menu.user.info',
+        name: '个人中心',
         key: 'user/info',
       },
       {
-        name: 'menu.user.setting',
+        name: '个人设置',
         key: 'user/setting',
+      },
+      {
+        name: '用户列表',
+        key: 'user/list',
       },
     ],
   },
