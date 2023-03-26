@@ -1,4 +1,5 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   Form,
   Input,
@@ -19,11 +20,16 @@ export const Status = ['未上线', '已上线'];
 const { OptGroup, Option } = Select;
 
 function SearchForm(props: {
-  baseMaterialList: any[];
+  materialList: any[];
   cookwareList: any[];
   onSearch: (values: Record<string, any>) => void;
 }) {
   const [searchForm] = useForm();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const baseMaterilId = params.get('base-materil-id');
+  const cookwareId = params.get('cookware-id');
+  const postTitle = params.get('post-title');
 
   const handleSubmit = () => {
     const values = searchForm.getFieldsValue();
@@ -35,7 +41,7 @@ function SearchForm(props: {
     props.onSearch({});
   };
 
-  const [options, setOptions] = useState(props?.baseMaterialList || []);
+  // const [materialList, setMaterialList] = useState(props?.materialList || []);
   const [fetching, setFetching] = useState(false);
   const refFetchId = useRef(null);
 
@@ -43,7 +49,7 @@ function SearchForm(props: {
     refFetchId.current = Date.now();
     const fetchId = refFetchId.current;
     setFetching(true);
-    setOptions([]);
+    // setMaterialList([]);
     fetch('https://randomuser.me/api/?results=5')
       .then((response) => response.json())
       .then((body) => {
@@ -60,10 +66,23 @@ function SearchForm(props: {
             value: user.email,
           }));
           setFetching(false);
-          setOptions(options);
         }
       });
   }, []);
+
+  useEffect(() => {
+    searchForm.setFieldsValue({
+      title: postTitle,
+      baseMaterialIds: baseMaterilId ? [baseMaterilId] : [],
+      cookwareIds: cookwareId ? [cookwareId] : [],
+    });
+    handleSubmit();
+    // props.onSearch({
+    //   title: postTitle,
+    //   baseMaterialIds: baseMaterilId ?[baseMaterilId] : [],
+    //   cookwareIds: cookwareId ? [cookwareId] : []
+    // });
+  }, [postTitle, baseMaterilId, cookwareId]);
 
   return (
     <div className={styles['search-form-wrapper']}>
@@ -75,10 +94,14 @@ function SearchForm(props: {
         wrapperCol={{ span: 19 }}
       >
         <Row gutter={24}>
-          <Col span={12}>
-            <Form.Item label="基础材料" field="name">
-              <Select
-                // style={{ width: 345 }}
+          <Col span={8}>
+            <Form.Item label="菜谱名称" field="title">
+              <Input placeholder="请输入菜谱名称" allowClear />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label="基础材料" field="baseMaterialIds">
+              {/* <Select
                 showSearch
                 mode="multiple"
                 options={options}
@@ -101,12 +124,41 @@ function SearchForm(props: {
                   ) : null
                 }
                 onSearch={debouncedFetchUser}
-              />
+              /> */}
+              <Select
+                showSearch
+                allowClear
+                placeholder="请选择基础材料"
+                mode="multiple"
+                filterOption={(inputValue, option) =>
+                  option.props.children
+                    .toLowerCase()
+                    .indexOf(inputValue.toLowerCase()) >= 0
+                }
+              >
+                {props?.materialList?.map((options) => (
+                  <OptGroup
+                    label={`${options.primaryMaterial.name}-${options.name}`}
+                    key={options.id}
+                  >
+                    {options.baseMaterialList.map((option) => (
+                      <Option key={option.id} value={option.id}>
+                        {option.name}
+                      </Option>
+                    ))}
+                  </OptGroup>
+                ))}
+              </Select>
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item label="厨具" field="cookwareId">
-              <Select showSearch allowClear placeholder="请选择厨具">
+            <Form.Item label="厨具" field="cookwareIds">
+              <Select
+                mode="multiple"
+                showSearch
+                allowClear
+                placeholder="请选择厨具"
+              >
                 {props?.cookwareList.map((option, index) => {
                   return (
                     <Option key={`option_${option.id}`} value={option.id}>
@@ -117,41 +169,6 @@ function SearchForm(props: {
               </Select>
             </Form.Item>
           </Col>
-          {/* <Col span={8}>
-            <Form.Item label={'筛选方式'} field="filterType">
-              <Select
-                placeholder={'全部'}
-                options={FilterType.map((item, index) => ({
-                  label: item,
-                  value: index,
-                }))}
-                mode="multiple"
-                allowClear
-              />
-            </Form.Item>
-          </Col> */}
-          {/* <Col span={8}>
-            <Form.Item label={'创建时间'} field="createdTime">
-              <DatePicker.RangePicker
-                allowClear
-                style={{ width: '100%' }}
-                disabledDate={(date) => dayjs(date).isAfter(dayjs())}
-              />
-            </Form.Item>
-          </Col> */}
-          {/* <Col span={8}>
-            <Form.Item label={'状态'} field="status">
-              <Select
-                placeholder={'全部'}
-                options={Status.map((item, index) => ({
-                  label: item,
-                  value: index,
-                }))}
-                mode="multiple"
-                allowClear
-              />
-            </Form.Item>
-          </Col> */}
         </Row>
       </Form>
       <div className={styles['right-button']}>
