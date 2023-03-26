@@ -13,6 +13,7 @@ import {
   Select,
   Badge,
   TableColumnProps,
+  Link,
 } from '@arco-design/web-react';
 import dayjs from 'dayjs';
 // import PermissionWrapper from '@/components/PermissionWrapper';
@@ -50,7 +51,7 @@ const formItemLayout = {
 };
 const { useForm } = Form;
 
-function IngredientBasePage() {
+function BaseMaterialPage() {
   const [infoForm] = useForm();
   const [current, setCurrent] = useState<any>();
 
@@ -91,6 +92,23 @@ function IngredientBasePage() {
       render: (value) => <Text>{value || '/'}</Text>,
     },
     {
+      title: '颜色',
+      dataIndex: 'color',
+      align: 'center',
+      render: (_) => {
+        return (
+          <div
+            style={{
+              width: '50px',
+              height: '20px',
+              margin: '0 auto',
+              background: _,
+            }}
+          ></div>
+        );
+      },
+    },
+    {
       title: '所属二级类型',
       dataIndex: 'secondaryMaterial',
       align: 'center',
@@ -100,7 +118,11 @@ function IngredientBasePage() {
       title: '可选菜谱',
       dataIndex: 'posts',
       align: 'center',
-      render: (_) => _?.length || 0,
+      render: (_, record) => (
+        <Link href={`/post/list?base-materil-id=${record.id}`}>
+          {_?.length || 0}
+        </Link>
+      ),
     },
     {
       title: '选择次数',
@@ -226,7 +248,7 @@ function IngredientBasePage() {
       setModalTitle(`${current ? '编辑' : '新建'}基础材料`);
       infoForm.setFieldsValue({
         name: current?.name,
-        ingredientSubTypeId: current?.ingredientSubType?.id,
+        secondaryMaterilId: current?.secondaryMateril?.id,
       });
     } else {
       setCurrent(undefined);
@@ -371,4 +393,4 @@ function IngredientBasePage() {
   );
 }
 
-export default IngredientBasePage;
+export default BaseMaterialPage;

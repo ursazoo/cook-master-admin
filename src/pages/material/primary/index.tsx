@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Table,
   Card,
@@ -14,6 +14,10 @@ import {
   Tag,
 } from '@arco-design/web-react';
 import { IconDownload, IconPlus } from '@arco-design/web-react/icon';
+import { useClickAway } from 'ahooks';
+
+import { SketchPicker } from 'react-color';
+
 import dayjs from 'dayjs';
 
 import styles from './style/index.module.less';
@@ -38,13 +42,16 @@ const formItemLayout = {
 const { useForm } = Form;
 function PrimaryMaterialListPage() {
   const [infoForm] = useForm();
+  const ref = useRef<any>(null);
   const [current, setCurrent] = useState<{
     id: string;
     name: string;
+    color: string;
   }>();
   const [visible, setVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [showColorPicker, setShowColorPicker] = useState(false);
 
   const [data, setData] = useState([]);
   const [pagination, setPatination] = useState<PaginationProps>({
@@ -82,6 +89,23 @@ function PrimaryMaterialListPage() {
               );
             })}
           </div>
+        );
+      },
+    },
+    {
+      title: '颜色',
+      dataIndex: 'color',
+      align: 'center',
+      render: (_) => {
+        return (
+          <div
+            style={{
+              width: '50px',
+              height: '20px',
+              margin: '0 auto',
+              background: _,
+            }}
+          ></div>
         );
       },
     },
@@ -165,10 +189,16 @@ function PrimaryMaterialListPage() {
   //   fetchData();
   // }, [pagination.current, pagination.pageSize, JSON.stringify(formParams)]);
 
+  useClickAway((event) => {
+    if ((event.target as HTMLElement)?.id !== 'colorPickerTrigger') {
+      setShowColorPicker(false);
+    }
+  }, ref);
+
   useEffect(() => {
     if (visible) {
-      setModalTitle(`${current ? '编辑' : '新建'}一级分类`);
-      if (current) {
+      setModalTitle(`${current?.id ? '编辑' : '新建'}一级分类`);
+      if (current?.id) {
         infoForm.setFieldValue('name', current.name);
       }
     } else {
@@ -215,7 +245,6 @@ function PrimaryMaterialListPage() {
   function handleSearch(values) {
     console.log(values);
     setPatination({ ...pagination, current: 1 });
-    // handleGetIngredientSubTypes(values)
   }
 
   // 保存基础材料信息弹窗
@@ -224,9 +253,9 @@ function PrimaryMaterialListPage() {
       console.log(values);
       setConfirmLoading(true);
       console.log(current);
-      if (current) {
+      if (current?.id) {
         // 更新信息
-        handleEditPrimaryMaterial(current.id, values);
+        handleEditPrimaryMaterial(current?.id, values);
       } else {
         handleCreatePrimaryMaterial(values);
       }
@@ -242,7 +271,6 @@ function PrimaryMaterialListPage() {
   return (
     <Card>
       <Title heading={6}>一级分类管理</Title>
-      {/* <SearchForm onSearch={handleSearch} ingredientSubTypes={subTypes} ingredientTypes={types}/> */}
       <div className={styles['button-group']}>
         <Space>
           <Button
@@ -290,6 +318,42 @@ function PrimaryMaterialListPage() {
             rules={[{ required: true, message: '名称是必填项' }]}
           >
             <Input allowClear placeholder="请输入名称" />
+          </FormItem>
+          <FormItem
+            label="颜色"
+            field="color"
+            rules={[{ required: true, message: '颜色是必选项' }]}
+          >
+            <div>
+              <div
+                className={styles.colorPickerBtn}
+                onClick={() => setShowColorPicker(!showColorPicker)}
+              >
+                <div
+                  id="colorPickerTrigger"
+                  className={styles.colorPickerInner}
+                  style={{ background: current?.color || '#fff' }}
+                />
+              </div>
+              {showColorPicker ? (
+                <div className={styles.colorPopover} ref={ref}>
+                  <div
+                    className={styles.colorCover}
+                    onClick={() => setShowColorPicker(false)}
+                  />
+                  <SketchPicker
+                    color={current?.color}
+                    onChange={(newColor) => {
+                      setCurrent({
+                        ...current,
+                        color: newColor.hex,
+                      });
+                      infoForm.setFieldValue('color', newColor.hex);
+                    }}
+                  />
+                </div>
+              ) : null}
+            </div>
           </FormItem>
         </Form>
       </Modal>

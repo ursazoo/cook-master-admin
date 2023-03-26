@@ -76,7 +76,15 @@ function CookWareListPage() {
           <div>
             {_.length
               ? _.map((item) => {
-                  return <Tag key={item.id}>{item.name}</Tag>;
+                  return (
+                    <Tag
+                      style={{ cursor: 'pointer', margin: '0 10px' }}
+                      key={item.id}
+                      onClick={() => window.open(`/post/${item.id}`)}
+                    >
+                      {item.title}
+                    </Tag>
+                  );
                 })
               : '/'}
           </div>
@@ -207,7 +215,6 @@ function CookWareListPage() {
   function handleSearch(values) {
     console.log(values);
     setPatination({ ...pagination, current: 1 });
-    // handleGetIngredientSubTypes(values)
   }
 
   // 保存基础材料信息弹窗
@@ -234,7 +241,6 @@ function CookWareListPage() {
   return (
     <Card>
       <Title heading={6}>厨具管理</Title>
-      {/* <SearchForm onSearch={handleSearch} ingredientSubTypes={subTypes} ingredientTypes={types}/> */}
       <div className={styles['button-group']}>
         <Space>
           <Button

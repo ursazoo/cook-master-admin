@@ -47,7 +47,7 @@ function SearchForm(props: {
                 {props?.secondaryMaterialList.map((options, index) => {
                   return (
                     <OptGroup label={options.name} key={`group_${index}`}>
-                      {options.ingredientSubTypes.map((option) => (
+                      {options.secondaryMaterialList.map((option) => (
                         <Option key={`option_${option.id}`} value={option.id}>
                           {option.name}
                         </Option>
@@ -59,7 +59,7 @@ function SearchForm(props: {
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item label="一级分类" field="ingredientTypeId">
+            <Form.Item label="一级分类" field="primaryMaterialId">
               <Select showSearch allowClear placeholder="请选择所属一级分类">
                 {props?.primaryMaterialList.map((option, index) => {
                   return (

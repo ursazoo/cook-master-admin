@@ -76,7 +76,14 @@ function SecondaryMaterialListPage() {
       align: 'center',
       render: (_) => {
         return (
-          <div style={{ color: '50px', height: '20px', background: _ }}></div>
+          <div
+            style={{
+              width: '50px',
+              height: '20px',
+              margin: '0 auto',
+              background: _,
+            }}
+          ></div>
         );
       },
     },
@@ -86,18 +93,6 @@ function SecondaryMaterialListPage() {
       align: 'center',
       render: (_) => _?.name || '/',
     },
-
-    // {
-    //   title: '基础材料',
-    //   dataIndex: 'ingredients',
-    //   align: 'center',
-    //   render: (_) =>
-    //     _.map((item) => (
-    //       <Tag style={{ margin: '0 5px' }} key={item.id} color="green">
-    //         {item.name}
-    //       </Tag>
-    //     )),
-    // },
     {
       title: '创建时间',
       dataIndex: 'createdTime',
@@ -143,7 +138,7 @@ function SecondaryMaterialListPage() {
     }
   );
 
-  const { run: handleGetSecondaryMaterialList, loading } = useRequest(
+  const { run: handleGetSecondaryMaterialList } = useRequest(
     getSecondaryMaterialList,
     {
       // manual: true,
@@ -206,7 +201,7 @@ function SecondaryMaterialListPage() {
       if (current?.id) {
         infoForm.setFieldsValue({
           name: current.name,
-          color: current.color,
+          color: current.color || current.primaryMaterial.color,
           primaryMaterialId: current.primaryMaterial.id,
         });
       }
@@ -255,7 +250,6 @@ function SecondaryMaterialListPage() {
     console.log(values);
     setPatination({ ...pagination, current: 1 });
     setFormParams(values);
-    // handleGetIngredientsecondaryMaterialList(values)
   }
 
   // 保存基础材料信息弹窗
@@ -328,6 +322,37 @@ function SecondaryMaterialListPage() {
           >
             <Input allowClear placeholder="输入名称" />
           </FormItem>
+
+          <FormItem
+            label="所属分类"
+            field="primaryMaterialId"
+            rules={[{ required: true, message: '所属分类是必选项' }]}
+          >
+            <Select
+              showSearch
+              allowClear
+              placeholder="选择所属分类"
+              style={{ width: 200 }}
+              onChange={(value) => {
+                const secondaryMaterial =
+                  primaryMaterialList.filter((item) => item.id === value) || [];
+                setCurrent({
+                  ...current,
+                  color: secondaryMaterial?.[0]?.color,
+                });
+                infoForm.setFieldValue('color', secondaryMaterial?.[0]?.color);
+              }}
+            >
+              {primaryMaterialList.map((option) => {
+                return (
+                  <Option key={`option_${option.id}`} value={option.id}>
+                    {option.name}
+                  </Option>
+                );
+              })}
+            </Select>
+          </FormItem>
+
           <FormItem
             label="颜色"
             field="color"
@@ -340,7 +365,7 @@ function SecondaryMaterialListPage() {
               >
                 <div
                   className={styles.colorPickerInner}
-                  style={{ background: current?.color || '#fff' }}
+                  style={{ background: current?.color }}
                 />
               </div>
               {showColorPicker ? (
@@ -362,26 +387,6 @@ function SecondaryMaterialListPage() {
                 </div>
               ) : null}
             </div>
-          </FormItem>
-          <FormItem
-            label="所属分类"
-            field="primaryMaterialId"
-            rules={[{ required: true, message: '所属分类是必选项' }]}
-          >
-            <Select
-              showSearch
-              allowClear
-              placeholder="选择所属分类"
-              style={{ width: 200 }}
-            >
-              {primaryMaterialList.map((option) => {
-                return (
-                  <Option key={`option_${option.id}`} value={option.id}>
-                    {option.name}
-                  </Option>
-                );
-              })}
-            </Select>
           </FormItem>
         </Form>
       </Modal>

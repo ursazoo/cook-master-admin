@@ -41,7 +41,7 @@ function SearchForm(props: {
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item label="二级分类" field="ingredientSubTypeId">
+            <Form.Item label="二级分类" field="secondaryMaterialId">
               <Select showSearch allowClear placeholder="选择所属分类">
                 {props?.primaryMaterialList?.map((options, index) => {
                   return (
