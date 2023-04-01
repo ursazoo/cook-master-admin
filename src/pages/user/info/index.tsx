@@ -14,7 +14,7 @@ import UserInfoHeader from './header';
 import styles from './style/index.module.less';
 import './mock';
 import { Card } from '@arco-design/web-react';
-import MyProject from './my-projects';
+// import MyProject from './my-projects';
 import MyTeam from './my-team';
 import LatestNews from './latest-news';
 
@@ -48,7 +48,7 @@ function UserInfo() {
               </Title>
               <Link>{t['userInfo.btn.more']}</Link>
             </div>
-            <MyProject />
+            {/* <MyProject /> */}
           </Card>
         </Col>
         <Col span={8}>

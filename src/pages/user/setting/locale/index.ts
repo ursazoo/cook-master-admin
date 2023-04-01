@@ -61,10 +61,10 @@ const i18n = {
     'userSetting.verified.label.enterpriseName': 'Enterprise Name',
 
     'userSetting.verified.label.enterpriseCertificateType':
-      'Enterprise certificate type',
+      'Enterprise certificate primary',
     'userSetting.verified.label.organizationCode': 'Organization Code',
 
-    'userSetting.verified.authType': 'Authentication type',
+    'userSetting.verified.authType': 'Authentication primary',
     'userSetting.verified.authContent': 'Authentication content',
     'userSetting.verified.authStatus': 'Current status',
     'userSetting.verified.createdTime': 'Created time',
