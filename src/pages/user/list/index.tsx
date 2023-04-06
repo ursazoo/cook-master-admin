@@ -7,10 +7,6 @@ import {
   Space,
   Form,
   Typography,
-  Message,
-  Input,
-  Modal,
-  Select,
   Badge,
   TableColumnProps,
   Link,
@@ -18,38 +14,16 @@ import {
 import dayjs from 'dayjs';
 // import PermissionWrapper from '@/components/PermissionWrapper';
 import { IconDownload, IconPlus } from '@arco-design/web-react/icon';
-import axios from 'axios';
 import SearchForm from './components/form';
 // import locale from './locale';
 import styles from './style/index.module.less';
-// import { getColumns } from './constants';
-import FormItem from '@arco-design/web-react/es/Form/form-item';
-import {
-  getPrimaryMaterialList,
-  IPrimaryMaterial,
-} from '@/common/apis/material/primary';
+import { IPrimaryMaterial } from '@/common/apis/material/primary';
 import { useRequest } from 'ahooks';
-import {
-  createBaseMaterial,
-  editBaseMaterial,
-  getBaseMaterialList,
-} from '@/common/apis/material/base';
+
 import { getAllUserList } from '@/common/apis/user/find';
 
-const { Title, Text } = Typography;
-const { OptGroup, Option } = Select;
+const { Title } = Typography;
 
-export const ContentType = ['图文', '横版短视频', '竖版短视频'];
-export const FilterType = ['规则筛选', '人工'];
-export const Status = ['已上线', '未上线'];
-const formItemLayout = {
-  labelCol: {
-    span: 4,
-  },
-  wrapperCol: {
-    span: 20,
-  },
-};
 const { useForm } = Form;
 
 function BaseMaterialPage() {
@@ -70,17 +44,9 @@ function BaseMaterialPage() {
   });
   // const [loading, setLoading] = useState(true);
   const [formParams, setFormParams] = useState({});
-  const [primaryMaterialList, setPrimaryMaterialList] = useState<
-    IPrimaryMaterial[]
-  >([]);
+  const [primaryMaterialList] = useState<IPrimaryMaterial[]>([]);
 
   const columns: TableColumnProps[] = [
-    // {
-    //   title: 'id',
-    //   dataIndex: 'id',
-    //   align: 'center',
-    //   render: (value) => <Text>{value}</Text>,
-    // },
     {
       title: '用户名称',
       dataIndex: 'name',
@@ -96,14 +62,14 @@ function BaseMaterialPage() {
       dataIndex: 'posts',
       align: 'center',
       render: (_, record) => (
-        <Link href={`/post/list?base-materil-id=${record.id}`}>
+        <Link href={`/post/list?base-material-id=${record.id}`}>
           {_?.length || 0}
         </Link>
       ),
     },
     {
       title: '权限',
-      dataIndex: 'count',
+      dataIndex: 'role',
       align: 'center',
       render(x) {
         return Number(x).toLocaleString();
@@ -163,16 +129,12 @@ function BaseMaterialPage() {
     },
   });
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, [pagination.current, pagination.pageSize, JSON.stringify(formParams)]);
-
   useEffect(() => {
     if (visible) {
       setModalTitle(`${current ? '编辑' : '新建'}基础材料`);
       infoForm.setFieldsValue({
         name: current?.name,
-        secondaryMaterilId: current?.secondaryMateril?.id,
+        secondaryMaterialId: current?.secondaryMaterial?.id,
       });
     } else {
       setCurrent(undefined);
@@ -180,30 +142,6 @@ function BaseMaterialPage() {
       infoForm.resetFields();
     }
   }, [visible, current]);
-
-  // 获取表格数据
-  function fetchData() {
-    const { current, pageSize } = pagination;
-    // setLoading(true);
-    axios
-      .get('/api/list', {
-        params: {
-          page: current,
-          pageSize,
-          ...formParams,
-        },
-      })
-      .then((res) => {
-        setData(res.data.list);
-        setPagination({
-          ...pagination,
-          current,
-          pageSize,
-          total: res.data.total,
-        });
-        // setLoading(false);
-      });
-  }
 
   // 表格设置分页属性或翻页
   function onChangeTable({ current, pageSize }) {

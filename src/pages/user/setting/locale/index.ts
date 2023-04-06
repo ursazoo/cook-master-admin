@@ -111,7 +111,7 @@ const i18n = {
     'userSetting.info.profile': '个人简介',
     'userSetting.info.profile.placeholder':
       '请输入您的个人简介，最多不超过200字。',
-    'userSetting.security.password': '登陆密码',
+    'userSetting.security.password': '登录密码',
     'userSetting.security.password.tips':
       '已设置。密码至少6位字符，支持数字、字母和除空格外的特殊字符，且必须同时包含数字和大小写字母。',
     'userSetting.security.question': '密保问题',

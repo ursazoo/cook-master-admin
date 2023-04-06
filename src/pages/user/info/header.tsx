@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+
 import { Avatar, Space, Skeleton } from '@arco-design/web-react';
 import {
   IconCamera,
@@ -6,6 +8,8 @@ import {
   IconUser,
   IconHome,
 } from '@arco-design/web-react/icon';
+import { selectUserInfo } from '@/store/userSlice';
+
 import styles from './style/index.module.less';
 
 interface HeaderProps {
@@ -20,8 +24,8 @@ interface HeaderProps {
 }
 
 function UserInfoHeader(props: HeaderProps) {
-  const { userInfo = {}, loading } = props;
-
+  const { loading } = props;
+  const userInfo = useSelector(selectUserInfo);
   const loadingNode = (
     <Skeleton
       text={{
@@ -51,7 +55,11 @@ function UserInfoHeader(props: HeaderProps) {
           loadingImgNode
         ) : (
           <Avatar size={64} triggerIcon={<IconCamera />}>
-            <img src={userInfo.avatar} />
+            {userInfo?.avatar ? (
+              <img alt="avatar" src={userInfo.avatar} />
+            ) : (
+              userInfo?.name
+            )}
           </Avatar>
         )}
         <div className={styles.username}>
