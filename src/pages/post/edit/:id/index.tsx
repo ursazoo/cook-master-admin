@@ -186,6 +186,12 @@ const PostEditPage = () => {
   });
 
   useRequest(getAllUserList, {
+    defaultParams: [
+      {
+        pageNum: 1,
+        pageSize: 20,
+      },
+    ],
     onSuccess: (result) => {
       console.log(result);
       if (result?.success) {

@@ -27,7 +27,7 @@ function SearchForm(props: {
   const [searchForm] = useForm();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const baseMaterilId = params.get('base-materil-id');
+  const baseMaterialId = params.get('base-material-id');
   const cookwareId = params.get('cookware-id');
   const postTitle = params.get('post-title');
 
@@ -73,16 +73,16 @@ function SearchForm(props: {
   useEffect(() => {
     searchForm.setFieldsValue({
       title: postTitle,
-      baseMaterialIds: baseMaterilId ? [baseMaterilId] : [],
+      baseMaterialIds: baseMaterialId ? [baseMaterialId] : [],
       cookwareIds: cookwareId ? [cookwareId] : [],
     });
     handleSubmit();
     // props.onSearch({
     //   title: postTitle,
-    //   baseMaterialIds: baseMaterilId ?[baseMaterilId] : [],
+    //   baseMaterialIds: baseMaterialId ?[baseMaterialId] : [],
     //   cookwareIds: cookwareId ? [cookwareId] : []
     // });
-  }, [postTitle, baseMaterilId, cookwareId]);
+  }, [postTitle, baseMaterialId, cookwareId]);
 
   return (
     <div className={styles['search-form-wrapper']}>

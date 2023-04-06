@@ -8,7 +8,6 @@ import {
   Card,
   Descriptions,
   Grid,
-  Skeleton,
   Space,
   Typography,
 } from '@arco-design/web-react';

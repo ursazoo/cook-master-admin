@@ -20,6 +20,9 @@ import { getAllUserList } from '@/common/apis/user/find';
 import { getCookwareList } from '@/common/apis/material/cookware';
 import { createPost } from '../../../common/apis/post/index';
 
+import 'vditor/dist/index.css';
+import Vditor from 'vditor';
+
 const { OptGroup, Option } = Select;
 const { Row, Col } = Grid;
 export const DIFFICULTY = ['简单', '中等', '困难'];
@@ -34,131 +37,132 @@ export const TIME = [
 const PostCreatePage = () => {
   const history = useHistory();
   const [form] = Form.useForm();
-  const [cherry, setCherry] = useState<Cherry>();
+  // const [cherry, setCherry] = useState<Cherry>();
+  const [vd, setVd] = React.useState<Vditor>();
 
-  const basicConfig = useMemo(
-    () => ({
-      id: 'markdown-container',
-      isPreviewOnly: false,
-      engine: {
-        global: {},
-        syntax: {
-          codeBlock: {
-            theme: 'twilight',
-          },
-          table: {
-            enableChart: false,
-            // chartEngine: Engine Class
-          },
-          fontEmphasis: {
-            allowWhitespace: false, // 是否允许首尾空格
-          },
-          strikethrough: {
-            needWhitespace: false, // 是否必须有前后空格
-          },
-          mathBlock: {
-            engine: 'MathJax', // katex或MathJax
-            src: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js', // 如果使用MathJax plugins，则需要使用该url通过script标签引入
-          },
-          inlineMath: {
-            engine: 'MathJax', // katex或MathJax
-          },
-          emoji: {
-            useUnicode: false,
-            customResourceURL:
-              'https://github.githubassets.com/images/icons/emoji/unicode/${code}.png?v8',
-            upperCase: true,
-          },
-          // toc: {
-          //     tocStyle: 'nested'
-          // }
-          // 'header': {
-          //   strict: false
-          // }
-        },
-        customSyntax: {
-          // SyntaxHookClass
-        },
-      },
-      toolbars: {
-        toolbar: [
-          'bold',
-          'italic',
-          {
-            strikethrough: [
-              'strikethrough',
-              'underline',
-              'sub',
-              'sup',
-              'ruby',
-              'customMenuAName',
-            ],
-          },
-          'size',
-          '|',
-          'color',
-          'header',
-          '|',
-          'ol',
-          'ul',
-          'checklist',
-          'panel',
-          'detail',
-          '|',
-          // 'formula',
-          {
-            insert: [
-              'image',
-              'audio',
-              'video',
-              'link',
-              'hr',
-              'br',
-              'code',
-              'formula',
-              'toc',
-              'table',
-              'pdf',
-              'word',
-              'ruby',
-            ],
-          },
-          // 'graph',
-          // 'togglePreview',
-          'settings',
-          'switchModel',
-          'codeTheme',
-          'export',
-          // 'theme'
-        ],
-        bubble: [
-          'bold',
-          'italic',
-          'underline',
-          'strikethrough',
-          'sub',
-          'sup',
-          'quote',
-          'ruby',
-          '|',
-          'size',
-          'color',
-        ], // array or false
-        // sidebar: ['mobilePreview', 'copy', 'theme'],
-      },
-      editor: {
-        defaultModel: 'edit&preview',
-        height: '80vh',
-      },
-      previewer: {
-        // 自定义markdown预览区域class
-        // className: 'markdown'
-      },
-      keydown: [],
-      //extensions: [],
-    }),
-    []
-  );
+  // const basicConfig = useMemo(
+  //   () => ({
+  //     id: 'markdown-container',
+  //     isPreviewOnly: false,
+  //     engine: {
+  //       global: {},
+  //       syntax: {
+  //         codeBlock: {
+  //           theme: 'twilight',
+  //         },
+  //         table: {
+  //           enableChart: false,
+  //           // chartEngine: Engine Class
+  //         },
+  //         fontEmphasis: {
+  //           allowWhitespace: false, // 是否允许首尾空格
+  //         },
+  //         strikethrough: {
+  //           needWhitespace: false, // 是否必须有前后空格
+  //         },
+  //         mathBlock: {
+  //           engine: 'MathJax', // katex或MathJax
+  //           src: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js', // 如果使用MathJax plugins，则需要使用该url通过script标签引入
+  //         },
+  //         inlineMath: {
+  //           engine: 'MathJax', // katex或MathJax
+  //         },
+  //         emoji: {
+  //           useUnicode: false,
+  //           customResourceURL:
+  //             'https://github.githubassets.com/images/icons/emoji/unicode/${code}.png?v8',
+  //           upperCase: true,
+  //         },
+  //         // toc: {
+  //         //     tocStyle: 'nested'
+  //         // }
+  //         // 'header': {
+  //         //   strict: false
+  //         // }
+  //       },
+  //       customSyntax: {
+  //         // SyntaxHookClass
+  //       },
+  //     },
+  //     toolbars: {
+  //       toolbar: [
+  //         'bold',
+  //         'italic',
+  //         {
+  //           strikethrough: [
+  //             'strikethrough',
+  //             'underline',
+  //             'sub',
+  //             'sup',
+  //             'ruby',
+  //             'customMenuAName',
+  //           ],
+  //         },
+  //         'size',
+  //         '|',
+  //         'color',
+  //         'header',
+  //         '|',
+  //         'ol',
+  //         'ul',
+  //         'checklist',
+  //         'panel',
+  //         'detail',
+  //         '|',
+  //         // 'formula',
+  //         {
+  //           insert: [
+  //             'image',
+  //             'audio',
+  //             'video',
+  //             'link',
+  //             'hr',
+  //             'br',
+  //             'code',
+  //             'formula',
+  //             'toc',
+  //             'table',
+  //             'pdf',
+  //             'word',
+  //             'ruby',
+  //           ],
+  //         },
+  //         // 'graph',
+  //         // 'togglePreview',
+  //         'settings',
+  //         'switchModel',
+  //         'codeTheme',
+  //         'export',
+  //         // 'theme'
+  //       ],
+  //       bubble: [
+  //         'bold',
+  //         'italic',
+  //         'underline',
+  //         'strikethrough',
+  //         'sub',
+  //         'sup',
+  //         'quote',
+  //         'ruby',
+  //         '|',
+  //         'size',
+  //         'color',
+  //       ], // array or false
+  //       // sidebar: ['mobilePreview', 'copy', 'theme'],
+  //     },
+  //     editor: {
+  //       defaultModel: 'edit&preview',
+  //       height: '80vh',
+  //     },
+  //     previewer: {
+  //       // 自定义markdown预览区域class
+  //       // className: 'markdown'
+  //     },
+  //     keydown: [],
+  //     //extensions: [],
+  //   }),
+  //   []
+  // );
 
   const [secondaryMaterialList, setSecondaryMaterialList] = useState([]);
   const [cookwareList, setCookwareList] = useState([]);
@@ -177,6 +181,12 @@ const PostCreatePage = () => {
   });
 
   useRequest(getAllUserList, {
+    defaultParams: [
+      {
+        pageNum: 1,
+        pageSize: 20,
+      },
+    ],
     onSuccess: (result) => {
       console.log(result);
       if (result?.success) {
@@ -220,7 +230,7 @@ const PostCreatePage = () => {
       console.log(values);
       handleCreatePost({
         title: values.title,
-        content: cherry?.getMarkdown(),
+        content: vd?.getHTML(),
         authorId: values.authorId,
         baseMaterialIds: values.baseMaterialIds,
         cookwareIds: values.cookwareIds,
@@ -229,10 +239,32 @@ const PostCreatePage = () => {
     });
   }
 
+  // useEffect(() => {
+  //   const cherryInstance: any = new Cherry(basicConfig);
+  //   setCherry(cherryInstance);
+  // }, [basicConfig]);
+
   useEffect(() => {
-    const cherryInstance: any = new Cherry(basicConfig);
-    setCherry(cherryInstance);
-  }, [basicConfig]);
+    const vditor = new Vditor('vditor', {
+      toolbar: [
+        'emoji',
+        'check',
+        'undo',
+        'redo',
+        'table',
+        'link',
+        'preview',
+        'export',
+      ],
+      placeholder: '请输入菜谱内容',
+      minHeight: 300,
+      typewriterMode: true,
+      // toolbarConfig: {hide: true},
+      after: () => {
+        setVd(vditor);
+      },
+    });
+  }, []);
 
   return (
     <Card>
@@ -429,7 +461,8 @@ const PostCreatePage = () => {
           发布
         </Button>
       </Space>
-      <div id="markdown-container"></div>
+      {/* <div id="markdown-container"></div> */}
+      <div id="vditor" className="vditor" />
     </Card>
   );
 };
