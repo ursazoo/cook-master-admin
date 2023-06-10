@@ -15,6 +15,7 @@ function MyPosts() {
         pageNum: 1,
         pageSize: 10,
         authorId: userInfo?.id,
+        withDetail: false,
       },
     ],
     onError(e) {
@@ -37,9 +38,11 @@ function MyPosts() {
       onClick={() => window.open(`/post/${item.id}`)}
     >
       <List.Item.Meta
-        avatar={<Avatar shape="square">{item.author.name}</Avatar>}
+        avatar={<Avatar shape="square">{item?.author?.name}</Avatar>}
         title={item.title}
-        description={item.baseMaterialList.map((item) => item.name).join('、')}
+        description={item.baseMaterialList
+          ?.map((item) => item?.name)
+          ?.join('、')}
       />
     </List.Item>
   );
@@ -68,7 +71,7 @@ function MyPosts() {
             ]}
           >
             <List.Item.Meta
-              avatar={<Avatar shape="square">{item.author.name}</Avatar>}
+              avatar={<Avatar shape="square">{item?.author?.name}</Avatar>}
               title={
                 <div
                   style={{ cursor: 'pointer' }}
@@ -77,9 +80,7 @@ function MyPosts() {
                   {item.title}
                 </div>
               }
-              description={`所需材料：${item.baseMaterialList
-                .map((item) => item.name)
-                .join('、')}`}
+              // description={`所需材料：${item?.baseMaterialList?.map((item) => item?.name).join('、')}`}
             />
           </List.Item>
         )}

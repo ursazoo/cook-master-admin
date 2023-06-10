@@ -28,6 +28,8 @@ export const createPost = (data: any): Promise<APIResponse<null>> => {
 export const getPostList = (data: {
   pageNum: number;
   pageSize: number;
+  withDetail: boolean;
+  authorId?: string;
 }): Promise<APIResponse<{ list: IPostItem[] }>> => {
   return request.post('/api/post/list', data);
 };

@@ -17,10 +17,16 @@ import locale from './locale';
 import styles from './style/index.module.less';
 import { useRequest } from 'ahooks';
 import { signin } from '@/common/apis/user/sign';
+import { getUserInfo } from '@/common/apis/user';
 import Cookies from 'js-cookie';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserInfo, setUserInfo } from '@/store/userSlice';
 
 export default function LoginForm() {
   const history = useHistory();
+  const dispatch = useDispatch();
+  // const userInfo = useSelector(selectUserInfo)
+
   const formRef = useRef<FormInstance>();
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,19 +36,34 @@ export default function LoginForm() {
   const t = useLocale(locale);
 
   const [rememberPassword, setRememberPassword] = useState(!!loginParams);
+  const { run: handleGetUserInfo } = useRequest(getUserInfo, {
+    manual: true,
+    onSuccess(result) {
+      console.log(result);
+      console.log(JSON.stringify(result?.data));
+      localStorage.setItem('user-info', JSON.stringify(result?.data));
+      dispatch(setUserInfo(result?.data || {}));
+    },
+    onError(e) {
+      console.log(e);
+      Message.error({
+        content: e.message,
+        duration: 2000,
+      });
+    },
+  });
 
   const { run: handleSignin } = useRequest(signin, {
     manual: true,
     onSuccess: (result) => {
       console.log(result);
       if (result.success) {
+        Cookies.set('Authorization', result?.data?.token);
+        handleGetUserInfo();
         Message.success({
           content: '登录成功',
           duration: 1500,
-          onClose: () => {
-            Cookies.set('Authorization', result?.data?.token);
-            history.replace('/material/primary');
-          },
+          onClose: () => history.replace('/material/primary'),
         });
       } else {
         Message.error({

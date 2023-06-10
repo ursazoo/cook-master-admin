@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
-import {
-  Typography,
-  Grid,
-  Link,
-  Result,
-  Skeleton,
-} from '@arco-design/web-react';
+import { Typography, Grid, Link } from '@arco-design/web-react';
 import useLocale from '@/utils/useLocale';
 import locale from './locale';
 import UserInfoHeader from './header';

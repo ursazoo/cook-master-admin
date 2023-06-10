@@ -6,28 +6,22 @@ import {
   PaginationProps,
   Button,
   Space,
-  Form,
   Typography,
-  Select,
-  Badge,
   TableColumnProps,
   Tag,
   Link,
 } from '@arco-design/web-react';
-import dayjs from 'dayjs';
 import { IconDownload, IconPlus } from '@arco-design/web-react/icon';
 import SearchForm from './components/form';
 
 import { useRequest } from 'ahooks';
 
 import styles from './style/index.module.less';
-import { getPostList } from '../../../common/apis/post/index';
+import { getPostList } from '@/common/apis/post/index';
 import { getSecondaryMaterialList } from '@/common/apis/material/secondary';
 import { getCookwareList } from '@/common/apis/material/cookware';
 
-const { Title, Text } = Typography;
-
-const { useForm } = Form;
+const { Title } = Typography;
 
 function PostListPage() {
   const history = useHistory();
@@ -81,7 +75,7 @@ function PostListPage() {
       title: '所需材料',
       dataIndex: 'baseMaterialList',
       align: 'center',
-      render: (_, record) => (
+      render: (_) => (
         <>
           {_.map((item) => (
             <Tag style={{ margin: '0 10px' }} key={item.id}>
@@ -95,7 +89,7 @@ function PostListPage() {
       title: '所需厨具',
       dataIndex: 'cookwareList',
       align: 'center',
-      render: (_, record) => (
+      render: (_) => (
         <>
           {_.map((item) => (
             <Tag style={{ margin: '0 10px' }} key={item.id}>
@@ -185,6 +179,7 @@ function PostListPage() {
       {
         pageNum: pagination.current,
         pageSize: pagination.pageSize,
+        withDetail: true,
       },
     ],
     onSuccess: (result) => {
@@ -227,6 +222,7 @@ function PostListPage() {
     handleGetPostList({
       pageNum: pagination.current,
       pageSize: pagination.pageSize,
+      withDetail: true,
       ...formParams,
     });
   }, [pagination.current, pagination.pageSize, formParams]);

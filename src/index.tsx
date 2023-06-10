@@ -7,7 +7,7 @@ import { ConfigProvider } from '@arco-design/web-react';
 import zhCN from '@arco-design/web-react/es/locale/zh-CN';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
-import rootReducer from './store';
+import store from './store';
 import PageLayout from './layout';
 import { GlobalContext } from './context';
 import Signin from './pages/signin';
@@ -16,7 +16,7 @@ import checkLogin from './utils/checkLogin';
 import changeTheme from './utils/changeTheme';
 import useStorage from './utils/useStorage';
 
-const store = createStore(rootReducer);
+// const store = createStore(rootReducer);
 
 function Index() {
   const [lang, setLang] = useStorage('arco-lang', 'en-US');

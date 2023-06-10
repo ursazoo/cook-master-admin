@@ -96,7 +96,8 @@ function CookWareListPage() {
       dataIndex: 'createdTime',
       align: 'center',
       render: (x) => dayjs(x).format('YYYY-MM-DD HH:mm'),
-      sorter: (a, b) => dayjs(b.createdAt).unix() - dayjs(a.createdAt).unix(),
+      sorter: (a, b) =>
+        dayjs(b.createdTime).unix() - dayjs(a.createdTime).unix(),
     },
     {
       title: '操作',

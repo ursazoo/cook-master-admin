@@ -23,8 +23,9 @@ import useRoute, { IRoute } from '@/routes';
 import useLocale from './utils/useLocale';
 import getUrlParams from './utils/getUrlParams';
 import lazyload from './utils/lazyload';
-import { GlobalState } from './store';
+// import { GlobalState } from './store';
 import styles from './style/layout.module.less';
+import { selectPermissions } from '@/store/userSlice';
 
 const MenuItem = Menu.Item;
 const SubMenu = Menu.SubMenu;
@@ -85,11 +86,10 @@ function PageLayout() {
   const pathname = history.location.pathname;
   const currentComponent = qs.parseUrl(pathname).url.slice(1);
   const locale = useLocale();
-  const { settings, userLoading, userInfo } = useSelector(
-    (state: GlobalState) => state
-  );
+  // const { settings } = useSelector((state: GlobalState) => state);
+  const permissions = useSelector(selectPermissions);
 
-  const [routes, defaultRoute] = useRoute(userInfo?.permissions);
+  const [routes, defaultRoute] = useRoute(permissions);
   const defaultSelectedKeys = [currentComponent || defaultRoute];
   const paths = (currentComponent || defaultRoute).split('/');
   const defaultOpenKeys = paths.slice(0, paths.length - 1);
@@ -106,11 +106,11 @@ function PageLayout() {
   >(new Map());
 
   const navbarHeight = 60;
-  const menuWidth = collapsed ? 48 : settings.menuWidth;
+  const menuWidth = collapsed ? 48 : 220;
 
-  const showNavbar = settings.navbar && urlParams.navbar !== false;
-  const showMenu = settings.menu && urlParams.menu !== false;
-  const showFooter = settings.footer && urlParams.footer !== false;
+  const showNavbar = true;
+  const showMenu = true;
+  const showFooter = true;
 
   const flattenRoutes = useMemo(() => getFlattenRoutes(routes) || [], [routes]);
 
@@ -178,7 +178,7 @@ function PageLayout() {
   const paddingLeft = showMenu ? { paddingLeft: menuWidth } : {};
   const paddingTop = showNavbar ? { paddingTop: navbarHeight } : {};
   const paddingStyle = { ...paddingLeft, ...paddingTop };
-  
+
   function updateMenuStatus() {
     const pathKeys = pathname.split('/');
     const newSelectedKeys: string[] = [];
@@ -214,75 +214,71 @@ function PageLayout() {
       >
         <Navbar show={showNavbar} />
       </div>
-      {userLoading ? (
-        <Spin className={styles['spin']} />
-      ) : (
-        <Layout>
-          {showMenu && (
-            <Sider
-              className={styles['layout-sider']}
-              width={menuWidth}
-              collapsed={collapsed}
-              onCollapse={setCollapsed}
-              trigger={null}
-              collapsible
-              breakpoint="xl"
-              style={paddingTop}
-            >
-              <div className={styles['menu-wrapper']}>
-                <Menu
-                  collapse={collapsed}
-                  onClickMenuItem={onClickMenuItem}
-                  selectedKeys={selectedKeys}
-                  openKeys={openKeys}
-                  onClickSubMenu={(_, openKeys) => setOpenKeys(openKeys)}
-                >
-                  {renderRoutes(locale)(routes, 1)}
-                </Menu>
-              </div>
-              <div className={styles['collapse-btn']} onClick={toggleCollapse}>
-                {collapsed ? <IconMenuUnfold /> : <IconMenuFold />}
-              </div>
-            </Sider>
-          )}
-          <Layout className={styles['layout-content']} style={paddingStyle}>
-            <div className={styles['layout-content-wrapper']}>
-              {!!breadcrumb.length && (
-                <div className={styles['layout-breadcrumb']}>
-                  <Breadcrumb>
-                    {breadcrumb.map((node, index) => (
-                      <Breadcrumb.Item key={index}>
-                        {typeof node === 'string' ? locale[node] || node : node}
-                      </Breadcrumb.Item>
-                    ))}
-                  </Breadcrumb>
-                </div>
-              )}
-              <Content>
-                <Switch>
-                  {flattenRoutes.map((route, index) => {
-                    return (
-                      <Route
-                        key={index}
-                        path={`/${route.key}`}
-                        component={route.component}
-                      />
-                    );
-                  })}
-                  <Route exact path="/">
-                    <Redirect to={`/${defaultRoute}`} />
-                  </Route>
-                  <Route
-                    path="*"
-                    component={lazyload(() => import('./pages/exception/403'))}
-                  />
-                </Switch>
-              </Content>
+      <Layout>
+        {showMenu && (
+          <Sider
+            className={styles['layout-sider']}
+            width={menuWidth}
+            collapsed={collapsed}
+            onCollapse={setCollapsed}
+            trigger={null}
+            collapsible
+            breakpoint="xl"
+            style={paddingTop}
+          >
+            <div className={styles['menu-wrapper']}>
+              <Menu
+                collapse={collapsed}
+                onClickMenuItem={onClickMenuItem}
+                selectedKeys={selectedKeys}
+                openKeys={openKeys}
+                onClickSubMenu={(_, openKeys) => setOpenKeys(openKeys)}
+              >
+                {renderRoutes(locale)(routes, 1)}
+              </Menu>
             </div>
-            {showFooter && <Footer />}
-          </Layout>
+            <div className={styles['collapse-btn']} onClick={toggleCollapse}>
+              {collapsed ? <IconMenuUnfold /> : <IconMenuFold />}
+            </div>
+          </Sider>
+        )}
+        <Layout className={styles['layout-content']} style={paddingStyle}>
+          <div className={styles['layout-content-wrapper']}>
+            {!!breadcrumb.length && (
+              <div className={styles['layout-breadcrumb']}>
+                <Breadcrumb>
+                  {breadcrumb.map((node, index) => (
+                    <Breadcrumb.Item key={index}>
+                      {typeof node === 'string' ? locale[node] || node : node}
+                    </Breadcrumb.Item>
+                  ))}
+                </Breadcrumb>
+              </div>
+            )}
+            <Content>
+              <Switch>
+                {flattenRoutes.map((route, index) => {
+                  return (
+                    <Route
+                      key={index}
+                      path={`/${route.key}`}
+                      component={route.component}
+                    />
+                  );
+                })}
+                <Route exact path="/">
+                  <Redirect to={`/${defaultRoute}`} />
+                </Route>
+                <Route
+                  path="*"
+                  component={lazyload(() => import('./pages/exception/403'))}
+                />
+              </Switch>
+            </Content>
+          </div>
+          {showFooter && <Footer />}
         </Layout>
-      )}
+      </Layout>
     </Layout>
   );
 }

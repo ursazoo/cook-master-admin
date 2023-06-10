@@ -1,18 +1,15 @@
 import React, { useContext, useEffect } from 'react';
 import {
   Tooltip,
-  Input,
   Avatar,
   Select,
   Dropdown,
   Menu,
   Divider,
   Message,
-  Button,
 } from '@arco-design/web-react';
 import {
   IconLanguage,
-  IconNotification,
   IconSunFill,
   IconMoonFill,
   IconUser,
@@ -22,24 +19,25 @@ import {
   IconDashboard,
   IconInteraction,
   IconTag,
-  IconLoading,
 } from '@arco-design/web-react/icon';
 import { useSelector, useDispatch } from 'react-redux';
-import { GlobalState } from '@/store';
+// import { GlobalState } from '@/store';
 import { GlobalContext } from '@/context';
 import useLocale from '@/utils/useLocale';
 import Logo from '@/assets/logo.svg';
-import MessageBox from '@/components/MessageBox';
 import IconButton from './IconButton';
-import Settings from '../Settings';
 import styles from './style/index.module.less';
 import defaultLocale from '@/locale';
 import useStorage from '@/utils/useStorage';
 import { generatePermission } from '@/routes';
+import { useHistory } from 'react-router';
+import { selectUserInfo, setPermissions } from '@/store/userSlice';
 
 function Navbar({ show }: { show: boolean }) {
+  const history = useHistory();
   const t = useLocale();
-  const { userInfo, userLoading } = useSelector((state: GlobalState) => state);
+  const userInfo = useSelector(selectUserInfo);
+
   const dispatch = useDispatch();
 
   const [_, setUserStatus] = useStorage('userStatus');
@@ -53,36 +51,21 @@ function Navbar({ show }: { show: boolean }) {
   }
 
   function onMenuItemClick(key) {
-    if (key === 'logout') {
-      logout();
-    } else {
-      Message.info(`You clicked ${key}`);
+    switch (key) {
+      case 'setting':
+        history.push('/user/setting');
+        break;
+      case 'logout':
+        logout();
+        break;
+      default:
+        Message.info(`You clicked ${key}`);
     }
   }
 
   useEffect(() => {
-    dispatch({
-      type: 'update-userInfo',
-      payload: {
-        userInfo: {
-          ...userInfo,
-          permissions: generatePermission(role),
-        },
-      },
-    });
+    dispatch(setPermissions(generatePermission(role)));
   }, [role]);
-
-  if (!show) {
-    return (
-      <div className={styles['fixed-settings']}>
-        <Settings
-          trigger={
-            <Button icon={<IconSettings />} type="primary" size="large" />
-          }
-        />
-      </div>
-    );
-  }
 
   const handleChangeRole = () => {
     const newRole = role === 'admin' ? 'user' : 'admin';
@@ -200,17 +183,14 @@ function Navbar({ show }: { show: boolean }) {
             />
           </Tooltip>
         </li>
-        <li>
-          <Settings />
-        </li>
         {userInfo && (
           <li>
-            <Dropdown droplist={droplist} position="br" disabled={userLoading}>
+            <Dropdown droplist={droplist} position="br" disabled={false}>
               <Avatar size={32} style={{ cursor: 'pointer' }}>
-                {userLoading ? (
-                  <IconLoading />
-                ) : (
+                {userInfo.avatar ? (
                   <img alt="avatar" src={userInfo.avatar} />
+                ) : (
+                  userInfo.name
                 )}
               </Avatar>
             </Dropdown>

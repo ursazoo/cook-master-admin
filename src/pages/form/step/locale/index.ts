@@ -16,7 +16,8 @@ const i18n = {
     'stepForm.basicInfo.name.placeholder':
       'Enter Chinese characters, letters or numbers, up to 20 characters',
     'stepForm.basicInfo.channelType': 'Channel Type',
-    'stepForm.basicInfo.channelType.required': 'Please select the channel type',
+    'stepForm.basicInfo.channelType.required':
+      'Please select the channel primary',
     'stepForm.basicInfo.time': 'Promotion time',
     'stepForm.basicInfo.time.required': 'Please select the promotion time',
     'stepForm.basicInfo.link': 'Promotion URL',

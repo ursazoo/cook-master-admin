@@ -5,7 +5,7 @@ const {
   addWebpackModuleRule,
   addWebpackPlugin,
   addWebpackAlias,
-  overrideDevServer
+  overrideDevServer,
 } = require('customize-cra');
 const ArcoWebpackPlugin = require('@arco-plugins/webpack-react');
 const addLessLoader = require('customize-cra-less-loader');
@@ -16,12 +16,12 @@ const addDevServerConfig = () => (config) => {
   return {
     ...config,
     proxy: {
-      '/api': 'http://localhost:3000',
-      changeOrigin: true
+      '/api': 'http://localhost:9000',
+      changeOrigin: true,
     },
     headers: {
-      'Access-Control-Allow-Origin': '*'
-    }
+      'Access-Control-Allow-Origin': '*',
+    },
   };
 };
 
@@ -30,23 +30,23 @@ module.exports = {
   webpack: override(
     addLessLoader({
       lessLoaderOptions: {
-        lessOptions: {}
-      }
+        lessOptions: {},
+      },
     }),
     addWebpackModuleRule({
       test: /\.svg$/,
-      loader: '@svgr/webpack'
+      loader: '@svgr/webpack',
     }),
     addWebpackPlugin(
       new ArcoWebpackPlugin({
         theme: '@arco-themes/react-arco-pro',
         modifyVars: {
-          'arcoblue-6': setting.themeColor
-        }
+          'arcoblue-6': setting.themeColor,
+        },
       })
     ),
     addWebpackAlias({
-      '@': path.resolve(__dirname, 'src')
+      '@': path.resolve(__dirname, 'src'),
     })
-  )
+  ),
 };

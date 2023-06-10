@@ -119,7 +119,7 @@ function BaseMaterialPage() {
       dataIndex: 'posts',
       align: 'center',
       render: (_, record) => (
-        <Link href={`/post/list?base-materil-id=${record.id}`}>
+        <Link href={`/post/list?base-material-id=${record.id}`}>
           {_?.length || 0}
         </Link>
       ),
@@ -216,6 +216,9 @@ function BaseMaterialPage() {
         setVisible(false);
         setConfirmLoading(false);
         handleGetBaseMaterialList();
+      } else {
+        Message.error(result?.message);
+        setConfirmLoading(false);
       }
     },
     onError: (e) => {
@@ -248,7 +251,7 @@ function BaseMaterialPage() {
       setModalTitle(`${current ? '编辑' : '新建'}基础材料`);
       infoForm.setFieldsValue({
         name: current?.name,
-        secondaryMaterilId: current?.secondaryMateril?.id,
+        secondaryMaterialId: current?.secondaryMaterial?.id,
       });
     } else {
       setCurrent(undefined);
